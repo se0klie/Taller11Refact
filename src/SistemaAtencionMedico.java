@@ -1,5 +1,8 @@
+package espol.edu.ec.taller11refactoring;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class SistemaAtencionMedico {
     private List<Paciente> pacientes;
@@ -44,28 +47,24 @@ public class SistemaAtencionMedico {
         return costoConsulta-valorARestar;
     }
 
-    // se puede parametrizar (obtener...)
-    public Paciente obtenerPaciente(String nombrePaciente) {
-        for(Paciente paciente : pacientes){
-            if (paciente.getNombre().equals(nombrePaciente))
-                return paciente;
+    public <T> T obtenerElemento(List<T> elementos, Predicate<T> criterio) {
+        for (T elemento : elementos) {
+            if (criterio.test(elemento)) {
+                return elemento;
+            }
         }
         return null;
+    }
+
+    public Paciente obtenerPaciente(String nombrePaciente) {
+        return obtenerElemento(pacientes, p -> p.getNombre().equals(nombrePaciente));
     }
 
     public ServicioMedico obtenerServicioMedico(String nombreServicio) {
-        for(ServicioMedico servicioMedico : serviciosMedicos){
-            if (servicioMedico.getNombre().equals(nombreServicio))
-                return servicioMedico;
-        }
-        return null;
+        return obtenerElemento(serviciosMedicos, s -> s.getNombre().equals(nombreServicio));
     }
 
     public Medico obtenerMedico(String nombreMedico) {
-        for(Medico medico : medicos){
-            if (medico.getNombre().equals(nombreMedico))
-                return medico;
-        }
-        return null;
+        return obtenerElemento(medicos, m -> m.getNombre().equals(nombreMedico));
     }
 }
